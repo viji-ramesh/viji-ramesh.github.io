@@ -32,7 +32,7 @@
   color-scheme: dark;
 }
 :root[data-theme="light"]{
-  --coral:#886438; --gold:#886438; --teal:#2F8068;
+  --coral:#E09C47; --gold:#E09C47; --teal:#32B692;
 }
 .theme-switching, .theme-switching *{ transition:none !important; }
 #themeToggle{
@@ -81,6 +81,8 @@ a{color:inherit;}
 .eyebrow-row{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
 .numtag{font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:13px;color:var(--accent);opacity:.7;}
 .tag{display:inline-block;font-size:12.5px;font-weight:700;letter-spacing:.02em;color:var(--accent);background:color-mix(in srgb, var(--accent) 14%, transparent);border-radius:100px;padding:5px 13px;}
+:root[data-theme="light"] .numtag{color:var(--ink);opacity:.55;}
+:root[data-theme="light"] .tag{color:var(--accent-text, #1B1C20);background:var(--accent);}
 .hero h1{font-size:clamp(28px,4vw,42px);font-weight:800;max-width:720px;}
 .hero p{opacity:.72;max-width:600px;font-size:16px;margin-top:14px;}
 .hero-media{display:grid;grid-template-columns:repeat(var(--imgcount),1fr);gap:12px;margin:36px 0 60px;}
@@ -137,7 +139,7 @@ a{color:inherit;}
 </div>
 <div class="wrap">
   <div class="hero reveal">
-    <div class="eyebrow-row"><span class="numtag">08 / 08</span><span class="tag" style="--accent:var(--gold);color:var(--gold);background:color-mix(in srgb, var(--gold) 16%, transparent);">Icons & illustration</span></div>
+    <div class="eyebrow-row"><span class="numtag">08 / 08</span><span class="tag" style="--accent:var(--gold);--accent-text:#1B1C20;">Icons & illustration</span></div>
     <h1>Iconography & illustration</h1>
     <p>Custom icon sets and character illustration used to add warmth and clarity to otherwise dense interfaces and decks.</p>
   </div>
