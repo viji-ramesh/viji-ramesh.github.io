@@ -2,6 +2,17 @@
 <html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
+<script>
+  (function(){
+    try{
+      var saved = localStorage.getItem('theme');
+      var theme = (saved === 'light' || saved === 'dark') ? saved : 'dark';
+      document.documentElement.setAttribute('data-theme', theme);
+    }catch(e){
+      document.documentElement.setAttribute('data-theme', 'dark');
+    }
+  })();
+</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Print & editorial — Vijayalakshmi Ramesh</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -10,10 +21,40 @@
 <style>
 
 :root{
-  --ink:#EDEBE6; --paper:#0E0F12; --paper-soft:#16171B;
-  --violet:#6C5CE7; --coral:#D19A56; --teal:#3FA98C; --gold:#D9AE63;
-  --line:rgba(237,235,230,0.10); --card:#1B1C21;
+  --ink:#1B1C20; --paper:#FBFAF8; --paper-soft:#F0EEEA;
+  --violet:#6C5CE7; --coral:#D19A56; --teal:#3FA98C; --gold:#D19A56;
+  --line:rgba(27,28,32,0.12); --card:#ffffff; --shadow-color:rgba(27,28,32,0.12);
+  color-scheme: light;
 }
+:root[data-theme="dark"]{
+  --ink:#EDEBE6; --paper:#0E0F12; --paper-soft:#16171B;
+  --card:#1B1C21; --line:rgba(237,235,230,0.10); --shadow-color:rgba(0,0,0,0.55);
+  color-scheme: dark;
+}
+:root[data-theme="light"]{
+  --coral:#886438; --gold:#886438; --teal:#2F8068;
+}
+.theme-switching, .theme-switching *{ transition:none !important; }
+#themeToggle{
+  position:fixed;top:18px;right:18px;z-index:2000;
+  width:42px;height:42px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--card);border:1px solid var(--line);
+  color:var(--ink);cursor:pointer;
+  box-shadow:0 4px 14px -4px var(--shadow-color);
+  transition:background-color .25s ease, border-color .25s ease, transform .2s ease;
+}
+#themeToggle:hover{transform:translateY(-2px);}
+#themeToggle .tt-icon{width:20px;height:20px;position:absolute;transition:opacity .2s ease, transform .3s ease;}
+#themeToggle .tt-sun{opacity:0;transform:rotate(-60deg) scale(.5);}
+#themeToggle .tt-moon{opacity:1;transform:rotate(0deg) scale(1);}
+:root[data-theme="light"] #themeToggle .tt-sun{opacity:1;transform:rotate(0deg) scale(1);}
+:root[data-theme="light"] #themeToggle .tt-moon{opacity:0;transform:rotate(60deg) scale(.5);}
+@media (prefers-reduced-motion: reduce){
+  #themeToggle .tt-icon{transition:opacity .01s linear;}
+  #themeToggle:hover{transform:none;}
+}
+@media (max-width:640px){ #themeToggle{top:14px;right:14px;width:38px;height:38px;} #themeToggle .tt-icon{width:18px;height:18px;} }
 *{box-sizing:border-box;}
 html{scroll-behavior:smooth;}
 body{margin:0;background:var(--paper);color:var(--ink);font-family:'Work Sans',sans-serif;font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;}
@@ -77,6 +118,15 @@ a{color:inherit;}
 </style>
 </head>
 <body>
+<button id="themeToggle" type="button" aria-label="Switch to light theme" aria-pressed="false">
+  <svg class="tt-icon tt-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <circle cx="12" cy="12" r="4.2"/>
+    <path d="M12 2.5v2.2M12 19.3v2.2M4.2 4.2l1.6 1.6M18.2 18.2l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.2 19.8l1.6-1.6M18.2 5.8l1.6-1.6"/>
+  </svg>
+  <svg class="tt-icon tt-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5z"/>
+  </svg>
+</button>
 <div class="topbar">
   <div class="topbar-inner">
     <div class="nav-pills">
@@ -118,9 +168,9 @@ a{color:inherit;}
       </div>
     </div>
   </div>
-  <div class="footer-cta">
+  <footer class="footer-cta">
     <a href="./work.html">&larr; Back to all work</a>
-  </div>
+  </footer>
 </div>
 
 <script>
@@ -128,6 +178,28 @@ a{color:inherit;}
     entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); } });
   }, {threshold:0.12});
   document.querySelectorAll('.reveal, .stagger').forEach(function(el){ io.observe(el); });
+</script>
+
+
+<script>
+  (function(){
+    var root = document.documentElement;
+    var btn = document.getElementById('themeToggle');
+    if(!btn) return;
+    function applyTheme(theme, persist){
+      root.classList.add('theme-switching');
+      root.setAttribute('data-theme', theme);
+      btn.setAttribute('aria-pressed', theme === 'light' ? 'true' : 'false');
+      btn.setAttribute('aria-label', theme === 'light' ? 'Switch to dark theme' : 'Switch to light theme');
+      if(persist){ try{ localStorage.setItem('theme', theme); }catch(e){} }
+      setTimeout(function(){ root.classList.remove('theme-switching'); }, 50);
+    }
+    btn.setAttribute('aria-pressed', root.getAttribute('data-theme') === 'light' ? 'true' : 'false');
+    btn.addEventListener('click', function(){
+      var current = root.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+      applyTheme(current === 'light' ? 'dark' : 'light', true);
+    });
+  })();
 </script>
 
 </body>
