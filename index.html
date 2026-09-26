@@ -15,6 +15,27 @@
       document.documentElement.setAttribute('data-theme', 'dark');
     }
   })();
+
+  // Decide, synchronously and before paint, whether the splash intro will
+  // actually play — same logic the splash script itself uses later, computed
+  // once here so the hero's own entrance animations can be held paused
+  // (via this class) until the splash actually finishes, instead of racing
+  // ahead and finishing 9+ seconds before the video does.
+  (function(){
+    try{
+      var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var navEntries = (performance.getEntriesByType && performance.getEntriesByType('navigation')) || [];
+      var navType = navEntries.length ? navEntries[0].type : 'navigate';
+      var hasSeenSplash = sessionStorage.getItem('splashSeen') === 'true';
+      var shouldSkip = (navType !== 'reload') && hasSeenSplash;
+      window.__splashWillShow = !(reduceMotion || shouldSkip);
+      if(window.__splashWillShow){
+        document.documentElement.classList.add('splash-pending');
+      }
+    }catch(e){
+      window.__splashWillShow = false;
+    }
+  })();
 </script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Vijayalakshmi Ramesh — Senior Visualizer, Brand & Digital Designer</title>
@@ -205,6 +226,7 @@
     100%{box-shadow:0 0 0 0 rgba(0,168,150,0);}
   }
   @keyframes fadeUp{ from{opacity:0;transform:translateY(16px);} to{opacity:1;transform:none;} }
+  html.splash-pending .hero-center *{ animation-play-state:paused !important; }
 
   .hero-2col{
     display:grid;grid-template-columns:1fr 0.95fr;gap:36px;align-items:center;
@@ -969,9 +991,14 @@
     position:fixed; inset:0; z-index:999;
     background:var(--paper);
     display:flex; align-items:center; justify-content:center;
-    opacity:1; transition:opacity .5s ease;
+    opacity:1; transform:scale(1);
+    transition:opacity .7s ease, transform .7s ease;
   }
-  #splash.hide{ opacity:0; pointer-events:none; }
+  #splash.hide{ opacity:0; transform:scale(1.04); pointer-events:none; }
+  @media (prefers-reduced-motion: reduce){
+    #splash{ transition:opacity .01s linear; }
+    #splash.hide{ transform:none; }
+  }
   #splashVideo{ width:100%; height:100%; object-fit:cover; display:block; }
   #splashSkip{
     position:fixed;
@@ -2278,7 +2305,12 @@
   const io = new IntersectionObserver((entries)=>{
     entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); } });
   }, {threshold:0.15});
-  document.querySelectorAll('.reveal, .stagger').forEach(el=>io.observe(el));
+  document.querySelectorAll('.reveal, .stagger').forEach(el=>{
+    // .hero-center is handled separately, synced to the splash's actual
+    // finish (see the splash script below) rather than revealing instantly.
+    if(el.classList.contains('hero-center') && window.__splashWillShow) return;
+    io.observe(el);
+  });
 
   // Theme toggle: dark by default, explicit choice persisted in localStorage,
   // shared across index.html and work.html/category pages via the same key.
@@ -2383,6 +2415,11 @@
       document.body.style.overflow = '';
       if(!reduceMotion) replayBtn.classList.add('show');
       try{ video.pause(); }catch(e){}
+      // Release the hero's held entrance animation now, in sync with the
+      // splash fading away, instead of it having finished 9+ seconds earlier.
+      document.documentElement.classList.remove('splash-pending');
+      var heroCenter = document.querySelector('.hero-center.reveal');
+      if(heroCenter) heroCenter.classList.add('in');
     }
 
     if(reduceMotion || shouldSkipForNavigation){
