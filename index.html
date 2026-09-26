@@ -116,8 +116,7 @@
   *{box-sizing:border-box;}
   html{
     scroll-behavior:smooth;
-    scroll-padding-top: calc(76px + env(safe-area-inset-top,0px));
-    overflow-x:hidden;
+    scroll-padding-top: calc(112px + env(safe-area-inset-top,0px));
   }
   body{
     margin:0;
@@ -129,8 +128,8 @@
     padding-top:env(safe-area-inset-top,0px);
     padding-bottom:env(safe-area-inset-bottom,0px);
     -webkit-font-smoothing:antialiased;
-    overflow-x:hidden;
   }
+  #pageContent{ overflow-x:hidden; }
   h1,h2,h3{
     font-family:'Space Grotesk', sans-serif;
     margin:0;
@@ -143,10 +142,33 @@
   @media (max-width:720px){ section{padding:50px 0;} }
 
   /* Nav */
+  /* Open to work banner */
+  #openToWorkBanner{
+    background:linear-gradient(90deg, color-mix(in srgb, var(--teal) 20%, var(--paper)), color-mix(in srgb, var(--violet) 20%, var(--paper)));
+    padding:9px 20px; display:flex; align-items:center; justify-content:center; gap:8px;
+    font-size:12.5px; font-weight:700; letter-spacing:.02em; color:var(--ink);
+    position:relative; overflow:hidden;
+    padding-top:calc(9px + env(safe-area-inset-top,0px));
+  }
+  #openToWorkBanner .pulse-dot{width:7px;height:7px;border-radius:50%;background:var(--teal);position:relative;flex-shrink:0;z-index:1;}
+  #openToWorkBanner .pulse-dot::after{content:'';position:absolute;inset:-4px;border-radius:50%;border:1.5px solid var(--teal);animation:owPulse 1.8s ease-out infinite;}
+  #openToWorkBanner span.ow-txt{position:relative;z-index:1;}
+  #openToWorkBanner::after{
+    content:'';position:absolute;inset:0;
+    background:linear-gradient(100deg,transparent 30%, rgba(255,255,255,0.10) 50%, transparent 70%);
+    transform:translateX(-100%);animation:owShimmer 4s ease-in-out infinite;
+  }
+  @keyframes owPulse{0%{transform:scale(.6);opacity:1;}100%{transform:scale(1.8);opacity:0;}}
+  @keyframes owShimmer{ 0%,75%{transform:translateX(-100%);} 100%{transform:translateX(100%);} }
+  @media (prefers-reduced-motion: reduce){
+    #openToWorkBanner .pulse-dot::after{animation:none;}
+    #openToWorkBanner::after{animation:none;display:none;}
+  }
+  @media (max-width:640px){ #openToWorkBanner{font-size:11.5px;padding:8px 14px;padding-top:calc(8px + env(safe-area-inset-top,0px));} }
+
+  #stickyTop{ position:sticky; top:0; z-index:80; }
   header.nav{
-    position:sticky; top:0; z-index:80;
-    padding-top:env(safe-area-inset-top,0px);
-    background:color-mix(in srgb, var(--paper) 86%, transparent);
+    background:color-mix(in srgb, var(--card) 90%, transparent);
     backdrop-filter:blur(10px);
     border-bottom:1px solid var(--line);
     transition:box-shadow .3s ease;
@@ -160,6 +182,7 @@
     font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:19px;
     display:flex;align-items:center;gap:10px;
   }
+  @media (max-width:640px){ .nav-mark{font-size:14px;font-weight:600;gap:6px;} .nav-mark .dot{width:6px;height:6px;} }
   .nav-mark .dot{width:8px;height:8px;border-radius:50%;background:var(--gold);display:inline-block;}
   nav.links{display:flex;gap:30px;font-size:15px;font-weight:500;position:relative;}
   nav.links a{opacity:0.62;text-decoration:none;position:relative;padding:4px 0;transition:opacity .2s ease;}
@@ -1011,15 +1034,6 @@
     cursor:pointer; backdrop-filter:blur(6px); transition:opacity .3s ease;
   }
   #splashSkip.hide{ opacity:0; pointer-events:none; }
-  #splashReplay{
-    position:fixed; left:18px; bottom:18px; z-index:900;
-    width:44px; height:44px; border-radius:50%;
-    background:var(--card); color:var(--ink);
-    border:1px solid var(--line); cursor:pointer; font-size:16px;
-    display:flex; align-items:center; justify-content:center;
-    opacity:0; pointer-events:none; transition:opacity .3s ease;
-  }
-  #splashReplay.show{ opacity:1; pointer-events:auto; }
   #splashUnmute{
     position:fixed;
     left:max(18px, env(safe-area-inset-left,0px));
@@ -1051,22 +1065,25 @@
   <video id="splashVideo" playsinline webkit-playsinline preload="auto"></video>
 </div>
 <button id="splashSkip" type="button">Skip intro</button>
-<button id="splashReplay" type="button" title="Replay intro" aria-label="Replay intro">&#8635;</button>
 <button id="splashUnmute" type="button" aria-label="Turn on sound">🔇 Tap for sound</button>
 
-<header class="nav" id="siteNav">
-  <div class="nav-inner">
-    <div class="nav-mark"><span class="dot"></span> Vijayalakshmi Ramesh</div>
-    <nav class="links" id="navLinks">
-      <a href="#about" data-sec="about">About</a>
-      <a href="#work" data-sec="work">Work</a>
-      <a href="#experience" data-sec="experience">Experience</a>
-      <a href="#extraSectionHostB" data-sec="extraSectionHostB">Contact</a>
-    </nav>
-    <a class="nav-cta" href="mailto:vijipakru@gmail.com">Say hello</a>
-  </div>
-</header>
+<div id="stickyTop">
+  <div id="openToWorkBanner"><span class="pulse-dot"></span><span class="ow-txt">Open to work — available for remote &amp; hybrid roles</span></div>
+  <header class="nav" id="siteNav">
+    <div class="nav-inner">
+      <div class="nav-mark"><span class="dot"></span> Vijayalakshmi Ramesh</div>
+      <nav class="links" id="navLinks">
+        <a href="#about" data-sec="about">About</a>
+        <a href="#work" data-sec="work">Work</a>
+        <a href="#experience" data-sec="experience">Experience</a>
+        <a href="#extraSectionHostB" data-sec="extraSectionHostB">Contact</a>
+      </nav>
+      <a class="nav-cta" href="mailto:vijipakru@gmail.com">Say hello</a>
+    </div>
+  </header>
+</div>
 
+<div id="pageContent">
 <!-- Fixed vertical social rail -->
 <div class="social-rail" aria-label="Social links">
   <a href="https://linkedin.com/in/vijaylakshmi-ramesh" target="_blank" rel="noopener" aria-label="LinkedIn">
@@ -2386,7 +2403,6 @@
   (function(){
     var splash = document.getElementById('splash');
     var skipBtn = document.getElementById('splashSkip');
-    var replayBtn = document.getElementById('splashReplay');
     var unmuteBtn = document.getElementById('splashUnmute');
     var video = document.getElementById('splashVideo');
     if(!splash || !video) return;
@@ -2413,7 +2429,6 @@
       skipBtn.classList.add('hide');
       unmuteBtn.classList.remove('show');
       document.body.style.overflow = '';
-      if(!reduceMotion) replayBtn.classList.add('show');
       try{ video.pause(); }catch(e){}
       // Release the hero's held entrance animation now, in sync with the
       // splash fading away, instead of it having finished 9+ seconds earlier.
@@ -2466,16 +2481,6 @@
     });
 
     skipBtn.addEventListener('click', finish);
-    replayBtn.addEventListener('click', function(){
-      finished = false;
-      splash.classList.remove('hide');
-      skipBtn.classList.remove('hide');
-      replayBtn.classList.remove('show');
-      document.body.style.overflow = 'hidden';
-      video.currentTime = 0;
-      safetyTimer = setTimeout(finish, 15000);
-      attemptPlay();
-    });
   })();
 
   // Selected work: strip + panel
@@ -3302,5 +3307,6 @@
     })();
   </script>
 
+</div>
 </body>
 </html>
