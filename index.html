@@ -268,10 +268,7 @@
     animation:fadeUp .7s ease both;
   }
   :root[data-theme="light"] .hero-eyebrow{
-    color:#1B1C20;display:inline-flex;align-items:center;gap:8px;
-  }
-  :root[data-theme="light"] .hero-eyebrow::before{
-    content:'';width:8px;height:8px;border-radius:50%;background:var(--coral);flex-shrink:0;
+    color:#886438;
   }
   h1.title{
     font-size:clamp(28px,3.8vw,42px);font-weight:800;line-height:1.16;margin-top:14px;
@@ -430,10 +427,30 @@
   }
   .stat{padding:26px 20px;text-align:left;border-right:1px solid var(--line);}
   .stat:last-child{border-right:none;}
-  .stat .num{font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:clamp(26px,3.4vw,38px);color:var(--violet);}
+  .stat .num{
+    font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:clamp(26px,3.4vw,38px);color:var(--violet);
+    position:relative;display:inline-block;padding-bottom:10px;
+    transition:transform .5s cubic-bezier(.34,1.56,.64,1);
+  }
+  .stat:nth-child(2) .num{color:var(--coral);}
+  .stat:nth-child(3) .num{color:var(--teal);}
+  .stat .num::after{
+    content:'';position:absolute;left:0;bottom:0;width:36px;height:3px;border-radius:2px;background:var(--violet);
+    transform-origin:left;transform:scaleX(0);transition:transform .7s cubic-bezier(.16,.8,.24,1), width .5s cubic-bezier(.34,1.56,.64,1);
+  }
+  .stat:nth-child(2) .num::after{background:var(--coral);}
+  .stat:nth-child(3) .num::after{background:var(--teal);}
+  .stat-row.in .stat .num::after{transform:scaleX(1);}
+  .stat:hover .num{transform:translateY(-5px);}
+  .stat:hover .num::after{width:52px;}
+  @media (prefers-reduced-motion: reduce){
+    .stat .num{transition:none;}
+    .stat .num::after{transition:none;}
+    .stat-row.in .stat .num::after{transform:scaleX(1);}
+  }
   .stat .label{font-size:14px;opacity:0.72;margin-top:4px;}
   @media (max-width:640px){
-    .stat-row{grid-template-columns:repeat(2,1fr);}
+    .stat-row{grid-template-columns:repeat(2,1fr);margin-top:36px;}
     .stat{border-right:none;border-bottom:none;padding:16px 4px;text-align:center;}
     .stat:nth-child(1){
       grid-column:1 / -1;border-bottom:1px solid var(--line);padding:24px 4px 20px;
@@ -462,8 +479,8 @@
   #work{margin-top:-150px;position:relative;z-index:1;}
   #experience{margin-top:-110px;position:relative;z-index:1;}
   @media (max-width:760px){
-    #work{margin-top:-60px;}
-    #experience{margin-top:20px;}
+    #work{margin-top:-130px;}
+    #experience{margin-top:0px;}
   }
   .marquee-wrap{
     border-bottom:1px solid var(--line);
@@ -730,6 +747,13 @@
   .wp-media{background:var(--paper-soft);overflow:hidden;}
   .wp-media img{width:100%;height:100%;object-fit:cover;display:block;}
   .wp-copy{padding:32px 34px;display:flex;flex-direction:column;justify-content:center;}
+  .wp-media, .wp-copy{transition:opacity .28s ease, transform .38s cubic-bezier(.16,.8,.24,1);}
+  .wp-media.slide-out-l, .wp-copy.slide-out-l{opacity:0;transform:translateX(-22px);}
+  .wp-media.slide-out-r, .wp-copy.slide-out-r{opacity:0;transform:translateX(22px);}
+  @media (prefers-reduced-motion: reduce){
+    .wp-media, .wp-copy{transition:opacity .15s ease;}
+    .wp-media.slide-out-l, .wp-copy.slide-out-l, .wp-media.slide-out-r, .wp-copy.slide-out-r{transform:none;}
+  }
   .wp-tag{display:inline-block;font-size:12px;font-weight:700;color:color-mix(in srgb, var(--accent) 80%, white);
     background:color-mix(in srgb, var(--accent) 16%, transparent);border-radius:100px;padding:4px 12px;margin-bottom:14px;width:fit-content;}
   :root[data-theme="light"] .wp-tag{color:var(--accent-text, #1B1C20);background:var(--accent);}
@@ -848,7 +872,7 @@
 
   /* Experience — journey map */
   .journey{position:relative;padding:56px 0 6px;}
-  @media (max-width:760px){ .journey{padding:30px 0 6px;} }
+  @media (max-width:760px){ .journey{padding:30px 0 50px;} }
   .j-svg{
     position:absolute;left:50%;top:6px;bottom:6px;height:calc(100% - 12px);width:2px;transform:translateX(-50%);overflow:visible;
     -webkit-mask-image:linear-gradient(to bottom, transparent, #000 8%, #000 76%, transparent);
@@ -2497,13 +2521,114 @@
     ];
     const strip = document.getElementById('workStrip');
     const panel = document.getElementById('workPanel');
-    if(strip && panel){
+    let currentIndex = 0;
+    let autoScrollPaused = false;
+    let rafId = null;
+    let direction = 1; // 1 = forward, -1 = backward (bounces at each end)
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function updatePanel(newIndex, goingForward){
+      if(newIndex === currentIndex) return;
+      const prevIndex = currentIndex;
+      currentIndex = newIndex;
+      const d = WORK[newIndex];
+      const media = document.getElementById('workPanelMedia');
+      const copy = document.getElementById('workPanelCopy');
+      const outClass = goingForward ? 'slide-out-l' : 'slide-out-r';
+      const inClass = goingForward ? 'slide-out-r' : 'slide-out-l';
+
+      media.classList.add(outClass);
+      copy.classList.add(outClass);
+
+      setTimeout(()=>{
+        panel.style.setProperty('--accent', d.accent);
+        panel.style.setProperty('--accent-text', d.accent === 'var(--violet)' ? '#fff' : '#1B1C20');
+        media.innerHTML = `<img src="${d.img}" alt="${d.tag}">`;
+        copy.innerHTML = `<span class="wp-tag">${d.tag}</span><h3>${d.title}</h3><p>${d.body}</p><div class="wp-hint">↗ View all work</div>`;
+
+        media.classList.remove(outClass);
+        copy.classList.remove(outClass);
+        media.classList.add(inClass);
+        copy.classList.add(inClass);
+        void media.offsetWidth;
+        requestAnimationFrame(()=>{
+          media.classList.remove(inClass);
+          copy.classList.remove(inClass);
+        });
+      }, 220);
+    }
+
+    function setActiveCard(newIndex, goingForward){
+      strip.querySelectorAll('.wi-card').forEach(c=>c.classList.remove('active'));
+      const card = strip.querySelector(`.wi-card[data-i='${newIndex}']`);
+      if(card) card.classList.add('active');
+      updatePanel(newIndex, goingForward);
+    }
+
+    // Where a card should sit once it's "active" — pinned near the left edge
+    // of the strip (with a little breathing room) so cards reliably progress
+    // left-to-right through the whole set, rather than centering (which, on
+    // wide screens where several cards already fit at once, barely moves).
+    function targetScrollFor(index){
+      const card = strip.querySelector(`.wi-card[data-i='${index}']`);
+      if(!card) return 0;
+      const maxScroll = strip.scrollWidth - strip.clientWidth;
+      return Math.max(0, Math.min(maxScroll, card.offsetLeft - 24));
+    }
+
+    if(strip && panel && !reduceMotion){
       strip.querySelectorAll('.wi-card').forEach(card=>{
         card.addEventListener('click', (e)=>{
           e.stopPropagation();
+          const newIndex = +card.dataset.i;
+          const goingForward = newIndex > currentIndex;
+          setActiveCard(newIndex, goingForward);
+        });
+      });
+      panel.addEventListener('click', ()=>{
+        window.location.href = (WORK[currentIndex] || WORK[0]).anchor + '.html';
+      });
+
+      strip.addEventListener('mouseenter', ()=> autoScrollPaused = true);
+      strip.addEventListener('mouseleave', ()=> autoScrollPaused = false);
+      strip.addEventListener('touchstart', ()=> autoScrollPaused = true, {passive:true});
+      strip.addEventListener('touchend', ()=> setTimeout(()=> autoScrollPaused = false, 2500));
+
+      let target = targetScrollFor(0);
+      let lastAdvance = performance.now();
+      const DWELL_MS = 1900; // how long each card stays "active" before advancing
+
+      function tick(now){
+        if(!autoScrollPaused){
+          // Ease the current scroll position toward this card's target spot.
+          const cur = strip.scrollLeft;
+          const diff = target - cur;
+          if(Math.abs(diff) > 0.5){
+            strip.scrollTo({left: cur + diff * 0.08, behavior:'instant'});
+          }
+
+          if(now - lastAdvance > DWELL_MS){
+            lastAdvance = now;
+            const nextIndex = (currentIndex + 1) % WORK.length;
+            setActiveCard(nextIndex, true);
+            target = targetScrollFor(nextIndex);
+          }
+        } else {
+          lastAdvance = now; // don't let dwell time accumulate while paused
+        }
+        rafId = requestAnimationFrame(tick);
+      }
+      rafId = requestAnimationFrame(tick);
+    } else if(strip && panel){
+      // Reduced motion: keep it fully manual, no auto-scroll, no forced transitions.
+      strip.querySelectorAll('.wi-card').forEach(card=>{
+        card.addEventListener('click', (e)=>{
+          e.stopPropagation();
+          const newIndex = +card.dataset.i;
           strip.querySelectorAll('.wi-card').forEach(c=>c.classList.remove('active'));
           card.classList.add('active');
-          const d = WORK[card.dataset.i];
+          currentIndex = newIndex;
+          const d = WORK[newIndex];
           panel.style.setProperty('--accent', d.accent);
           panel.style.setProperty('--accent-text', d.accent === 'var(--violet)' ? '#fff' : '#1B1C20');
           document.getElementById('workPanelMedia').innerHTML = `<img src="${d.img}" alt="${d.tag}">`;
@@ -2511,7 +2636,7 @@
         });
       });
       panel.addEventListener('click', ()=>{
-        window.location.href = (WORK[strip.querySelector('.wi-card.active').dataset.i] || WORK[0]).anchor + '.html';
+        window.location.href = (WORK[currentIndex] || WORK[0]).anchor + '.html';
       });
     }
 
@@ -2519,8 +2644,14 @@
     const wsLeft = document.getElementById('wsArrowLeft');
     const wsRight = document.getElementById('wsArrowRight');
     if(strip && wsLeft && wsRight){
-      wsLeft.addEventListener('click', ()=> strip.scrollBy({left:-260, behavior:'smooth'}));
-      wsRight.addEventListener('click', ()=> strip.scrollBy({left:260, behavior:'smooth'}));
+      wsLeft.addEventListener('click', ()=> {
+        autoScrollPaused = true;
+        strip.scrollTo({left: Math.max(0, strip.scrollLeft - 260), behavior:'smooth'});
+      });
+      wsRight.addEventListener('click', ()=> {
+        autoScrollPaused = true;
+        strip.scrollTo({left: strip.scrollLeft + 260, behavior:'smooth'});
+      });
     }
   })();
 
