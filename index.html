@@ -1111,6 +1111,9 @@ html.locked,html.locked body{overflow:hidden}html.locked #site{display:none}.int
   /* ---- "Hi" comes out of her mouth ---- */
   .intro .man .hi{fill:var(--ink);stroke:none;opacity:0;transform-box:fill-box;transform-origin:0% 100%;animation:sayHi 2.6s ease-out .6s infinite;}
   @keyframes sayHi{0%{opacity:0;transform:translate(-2px,3px) scale(.5);}18%{opacity:1;transform:translate(0,0) scale(1);}65%{opacity:1;transform:translate(3px,-4px) scale(1);}100%{opacity:0;transform:translate(7px,-9px) scale(1);}}
+
+  /* "Hi, I'm" before the name */
+  .intro .info h1 .hi-intro{font-weight:300;letter-spacing:.02em;text-transform:none;opacity:.85;margin-right:.35em;}
 </style>
 </head>
 <body>
@@ -1137,7 +1140,7 @@ html.locked,html.locked body{overflow:hidden}html.locked #site{display:none}.int
 
 
 
-<div class="info"><h1>VIJAYALAKSHMI RAMESH</h1><p class="pf">A Portfolio in Brand &amp; Visual Craft</p><p class="tag">Seven years of shaping brands, interfaces and stories through visual design, UI and digital media, one considered detail at a time.</p></div>
+<div class="info"><h1><span class="hi-intro">Hi, I'm</span> VIJAYALAKSHMI RAMESH</h1><p class="pf">A Portfolio in Brand &amp; Visual Craft</p><p class="tag">Seven years of shaping brands, interfaces and stories through visual design, UI and digital media, one considered detail at a time.</p></div>
 <svg class="man" id="man" viewBox="0 0 60 100" aria-hidden="true">
 <g id="mb">
 <g id="aB" class="bk" stroke-width="5" transform="translate(30 27)"><line x2="0" y2="18"/><g id="fB" transform="translate(0 18)"><line x2="0" y2="16"/></g></g>
