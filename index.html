@@ -224,10 +224,7 @@
   @media (min-width:901px){ .wrap, .nav-inner{ padding-left:86px; } }
 
   /* Hero */
-  .hero{
-    padding:48px 0 32px;position:relative;overflow:hidden;
-    width:100vw;margin-left:calc(-50vw + 50%);
-  }
+  .hero{     padding:48px 0 32px;position:relative;overflow:hidden;     width:100vw;margin-left:0;   }
   .hero-inner{max-width:1180px;margin:0 auto;padding:0 28px;position:relative;}
   @media (min-width:901px){ .hero-inner{padding-left:86px;} }
   .mesh{
@@ -3652,6 +3649,20 @@ else setTimeout(startWalk,2000);};
   setInterval(function(){ if(!anim) snapTo(Math.round(rot) + 1); }, STEP_MS);
   window.addEventListener('resize', layout);
   layout();
+})();
+</script>
+<script>
+/* full-bleed hero: measure the container once the layout is ready, on load and resize */
+(function(){
+  var hero=document.getElementById('top'); if(!hero) return;
+  function fit(){
+    var parent=hero.parentElement; if(!parent) return;
+    var r=parent.getBoundingClientRect();
+    var pl=parseFloat(getComputedStyle(parent).paddingLeft)||0;
+    hero.style.width=document.documentElement.clientWidth+'px';
+    hero.style.marginLeft=(-(r.left+pl))+'px';
+  }
+  fit(); window.addEventListener('load',fit); window.addEventListener('resize',fit);
 })();
 </script>
 </body>
