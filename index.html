@@ -3647,29 +3647,9 @@ else setTimeout(startWalk,5300);};
     }
     anim = requestAnimationFrame(step);
   }
-  stage.addEventListener('pointerdown', function(e){
-    if(e.button !== 0) return;
-    if(anim){ cancelAnimationFrame(anim); anim = null; }
-    drag = { x: e.clientX, r: rot, card: e.target.closest && e.target.closest('.cw-card') };
-    moved = 0; stage.setPointerCapture(e.pointerId); stage.classList.add('dragging');
-  });
-  stage.addEventListener('pointermove', function(e){
-    if(!drag) return;
-    var dx = e.clientX - drag.x; moved = Math.max(moved, Math.abs(dx));
-    rot = drag.r - dx / PX_PER_STEP; layout();
-  });
-  function end(){
-    if(!drag) return;
-    var d = drag; drag = null; stage.classList.remove('dragging');
-    if(moved > 6){ snapTo(Math.round(rot)); return; }
-    if(!d.card) return;
-    if(d.card.classList.contains('is-center')){ window.location.href = d.card.dataset.href; return; }
-    var i = cards.indexOf(d.card);
-    var delta = i - rot; delta = delta - N*Math.round(delta/N);
-    snapTo(rot + delta);
-  }
-  stage.addEventListener('pointerup', end);
-  stage.addEventListener('pointercancel', end);
+  /* autoplay: the fan keeps shifting to the next card, no interaction needed */
+  var STEP_MS = 2600;
+  setInterval(function(){ if(!anim) snapTo(Math.round(rot) + 1); }, STEP_MS);
   window.addEventListener('resize', layout);
   layout();
 })();
