@@ -1086,6 +1086,20 @@ html.locked,html.locked body{overflow:hidden}html.locked #site{display:none}.int
   .intro .man circle{fill:var(--ink);}
   .intro .step{border-color:var(--ink);color:var(--ink);background:transparent;}
   .intro .step:hover{background:var(--ink);color:var(--paper);}
+
+  /* ---- splash: drop becomes a V, and the sprout draws itself out of it ---- */
+  .intro .vmark{position:absolute;z-index:2;left:50%;top:var(--q);width:30px;height:28px;margin:-26px 0 0 -15px;overflow:visible;pointer-events:none;animation:vFade .5s ease 2.6s forwards;}
+  @keyframes vFade{to{opacity:0;}}
+  .intro .vmark path{stroke-dasharray:40;stroke-dashoffset:40;animation:vDraw .55s ease-out 1.42s forwards;}
+  @keyframes vDraw{to{stroke-dashoffset:0;}}
+  .intro .sprout{opacity:1;animation:sproutFade .6s ease 2.75s forwards;}
+  .intro .sprout .stem{stroke-dasharray:24;stroke-dashoffset:24;animation:stemDraw .8s ease-out 2.0s forwards;}
+  .intro .sprout .lf{opacity:0;transform-box:fill-box;transform:scale(.2);animation:leafIn .5s cubic-bezier(.2,.8,.3,1) 2.55s forwards;}
+  .intro .sprout .lf1{transform-origin:0% 100%;}
+  .intro .sprout .lf2{transform-origin:100% 100%;}
+  @keyframes stemDraw{to{stroke-dashoffset:0;}}
+  @keyframes leafIn{to{opacity:1;transform:scale(1);}}
+  @keyframes sproutFade{from{opacity:1;}to{opacity:0;}}
 </style>
 </head>
 <body>
@@ -1109,9 +1123,10 @@ html.locked,html.locked body{overflow:hidden}html.locked #site{display:none}.int
 <header class="intro pending" id="introTop">
 <div class="fill"></div>
 <span class="drop"></span><span class="ring"></span>
-<svg class="sprout" viewBox="0 0 30 38" aria-hidden="true"><path d="M15 38C15 30 15 24 15 17" stroke="#cfa45c" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M15 21C6 21 2 14 3 7C11 7 15 12 15 21Z" fill="#cfa45c"/><path d="M15 17C15 9 20 4 28 4C28 12 23 17 15 17Z" fill="#cfa45c"/></svg>
-<span class="ltr s" aria-hidden="true">S</span><span class="ltr r" aria-hidden="true">R</span>
-<div class="info"><h1>VIJAYALAKSHMI RAMESH</h1><p class="pf">Portfolio</p><p class="tag">A brand and creative professional with over seven years of experience in visual design, UI, and digital media.</p></div>
+<svg class="vmark" viewBox="0 0 30 28" aria-hidden="true"><path d="M3 2 L15 26 L27 2" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+<svg class="sprout" viewBox="0 0 30 38" aria-hidden="true"><path class="stem" d="M15 38C15 30 15 24 15 17" stroke="#cfa45c" stroke-width="2.4" fill="none" stroke-linecap="round"/><path class="lf lf1" d="M15 21C6 21 2 14 3 7C11 7 15 12 15 21Z" fill="#cfa45c"/><path class="lf lf2" d="M15 17C15 9 20 4 28 4C28 12 23 17 15 17Z" fill="#cfa45c"/></svg>
+<span class="ltr s" aria-hidden="true">V</span><span class="ltr r" aria-hidden="true">J</span>
+<div class="info"><h1>VIJAYALAKSHMI RAMESH</h1><p class="pf">A Portfolio in Brand &amp; Visual Craft</p><p class="tag">Seven years of shaping brands, interfaces and stories through visual design, UI and digital media, one considered detail at a time.</p></div>
 <svg class="man" id="man" viewBox="0 0 60 100" aria-hidden="true">
 <g id="mb">
 <g id="aB" class="bk" stroke-width="5" transform="translate(30 27)"><line x2="0" y2="18"/><g id="fB" transform="translate(0 18)"><line x2="0" y2="16"/></g></g>
@@ -3775,7 +3790,7 @@ if(window.__introDone)window.__introDone();document.body.classList.add('entered'
 setTimeout(function(){intro.style.display='none';window.scrollTo(0,0)},900);
 startRoles();
 }
-window.__showIntro=function(){intro.classList.remove('pending');
+window.__showIntro=function(){intro.classList.remove('pending');['splashSkip','splashUnmute'].forEach(function(id){var e=document.getElementById(id);if(e)e.style.display='none';});
 if(reduce){btn.classList.add('ready');x=xs();pose(.6,0);place();man.style.opacity=1}
 else setTimeout(startWalk,5300);};
 })();
