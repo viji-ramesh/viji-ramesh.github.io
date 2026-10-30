@@ -104,7 +104,7 @@
   var masonry=document.querySelector('.masonry'); if(!masonry) return;
   var cards=[].slice.call(masonry.querySelectorAll(':scope > .m'));
   var PICS=[300,400,250,360,280,420,260,340,230,380];
-  var FIT_WHOLE=['Product & UI','Information design','Packaging','Print & editorial'];
+  var FIT_WHOLE=['Product & UI','Information design','Packaging'];
   var wrap=null;
   function colCount(){ return window.innerWidth<=1100?3:4; }
   function titleOf(card){ var t=card.querySelector('h3'); return t?t.textContent.trim():''; }
