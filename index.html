@@ -1298,6 +1298,11 @@ html.locked,html.locked body{overflow:hidden}html.locked #site{display:none}.int
     .about-ui-m .ui-tag{font-size:9px;padding:4px 6px;position:absolute;animation:tagCycle 9s ease-in-out infinite;}
     .about-ui{display:none;}
   }
+
+  /* STEP IN: the figure walks quickly off to the right, then the homepage opens */
+  .intro.walk-out .girl{animation:outRun .8s cubic-bezier(.45,0,.9,.6) forwards !important;opacity:1 !important;}
+  @keyframes outRun{from{transform:translateX(calc(50vw - 17px))}to{transform:translateX(110vw)}}
+  .intro.walk-out .step{animation:none !important;opacity:0 !important;transition:opacity .2s ease;}
 </style>
 </head>
 <body>
@@ -3816,7 +3821,13 @@ html.locked,html.locked body{overflow:hidden}html.locked #site{display:none}.int
     setTimeout(function(){ intro.style.display='none'; window.scrollTo(0,0); },900);
     startRoles();
   }
-  btn.addEventListener('click', enter);
+  var walking=false;
+  function walkOut(){
+    if(walking||entered) return; walking=true; clearTimeout(hold);
+    intro.classList.add('walk-out');
+    setTimeout(enter, 900);
+  }
+  btn.addEventListener('click', walkOut);
   window.__showIntro=function(){
     if(window.__introShown) return; window.__introShown=true;
     intro.classList.remove('pending');
@@ -3824,7 +3835,7 @@ html.locked,html.locked body{overflow:hidden}html.locked #site{display:none}.int
     ['splashSkip','splashUnmute'].forEach(function(id){ var e=document.getElementById(id); if(e) e.style.display='none'; });
     /* STEP IN appears with the figure (about 2.9s); hold 8 seconds after that, then go on */
     var appear = reduce ? 0 : 2900;
-    hold=setTimeout(function(){ if(!entered) enter(); }, appear+8000);
+    hold=setTimeout(function(){ walkOut(); }, appear+8000);
   };
 })();
 </script>
