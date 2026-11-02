@@ -1301,7 +1301,7 @@ html.locked,html.locked body{overflow:hidden}html.locked #site{display:none}.int
 
   /* STEP IN: the figure walks quickly off to the right, then the homepage opens */
   .intro.walk-out .girl{animation:outRun .8s cubic-bezier(.45,0,.9,.6) forwards !important;opacity:1 !important;}
-  @keyframes outRun{from{transform:translateX(calc(50vw - 17px))}to{transform:translateX(110vw)}}
+  @keyframes outRun{from{transform:translateX(var(--from,calc(50vw - 17px)))}to{transform:translateX(110vw)}}
   .intro.walk-out .step{animation:none !important;opacity:0 !important;transition:opacity .2s ease;}
 </style>
 </head>
@@ -3824,6 +3824,9 @@ html.locked,html.locked body{overflow:hidden}html.locked #site{display:none}.int
   var walking=false;
   function walkOut(){
     if(walking||entered) return; walking=true; clearTimeout(hold);
+    var g=document.getElementById('girl'), ir=intro.getBoundingClientRect();
+    var x=g ? g.getBoundingClientRect().left-ir.left : 0;
+    intro.style.setProperty('--from', x+'px');
     intro.classList.add('walk-out');
     setTimeout(enter, 900);
   }
