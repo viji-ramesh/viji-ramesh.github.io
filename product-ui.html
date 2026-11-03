@@ -271,15 +271,6 @@ html,body{overflow-x:hidden;max-width:100%;}
 </head>
 <body>
 
-<button id="themeToggle" type="button" aria-label="Switch to light theme" aria-pressed="false">
-  <svg class="tt-icon tt-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-    <circle cx="12" cy="12" r="4.2"/>
-    <path d="M12 2.5v2.2M12 19.3v2.2M4.2 4.2l1.6 1.6M18.2 18.2l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.2 19.8l1.6-1.6M18.2 5.8l1.6-1.6"/>
-  </svg>
-  <svg class="tt-icon tt-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-    <path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5z"/>
-  </svg>
-</button>
 <div class="topbar">
   <div class="topbar-inner">
     <div class="nav-pills">
@@ -300,7 +291,7 @@ html,body{overflow-x:hidden;max-width:100%;}
     </div>
   </div>
   <div class="h-list stagger"><div class="h-item"><div class="h-row" data-panel="1"><span class="h-idx">01</span><span class="h-name">Mobile app UI</span><span class="h-year">—</span></div><div class="h-slot" data-slot-for="1"></div><div class="h-hover-preview"></div></div></div>
-  <div class="h-templates" hidden><template data-template="1"><div class="pv"><div class="pv-frame"><img class="pv-img" alt=""><button class="pv-nav prev" data-nav="prev" aria-label="Previous">&#8249;</button><button class="pv-nav next" data-nav="next" aria-label="Next">&#8250;</button></div><div class="pv-info"><div class="pv-top"><div class="pv-title">Mobile app UI</div><div class="pv-count">01 / 07</div></div><div class="pv-meta">—</div><div class="pv-thumbs"><button class="pv-thumb on" data-thumb="0" data-title="Go Onn — Chat app, sign-in and messaging" data-meta="—"><img src="images/b95c43afefe6.jpg" alt=""></button><button class="pv-thumb" data-thumb="1" data-title="HHH — Wellness app, membership and lessons" data-meta="—"><img src="images/8959b24a6dc1.jpg" alt=""></button><button class="pv-thumb" data-thumb="2" data-title="Oz Chat — Messaging app, chats and profile" data-meta="—"><img src="images/34d5a201fa8f.jpg" alt=""></button><button class="pv-thumb" data-thumb="3" data-title="Health care app — Clinic booking and shop" data-meta="—"><img src="images/b0fd95a9b2ea.jpg" alt=""></button><button class="pv-thumb" data-thumb="4" data-title="Appy Home — Shopping app, home and categories" data-meta="—"><img src="images/89d59b531f47.jpg" alt=""></button><button class="pv-thumb" data-thumb="5" data-title="Fintastics — Personal finance app" data-meta="—"><img src="images/32cb69f92114.jpg" alt=""></button><button class="pv-thumb" data-thumb="6" data-title="Crochovia — Mobile app, product browsing" data-meta="—"><img src="images/e63a03b8f625.jpg" alt=""></button></div></div></div></template></div>
+  <div class="h-templates" hidden><template data-template="1"><div class="pv"><div class="pv-frame"><img loading="lazy" decoding="async" class="pv-img" alt=""><button class="pv-nav prev" data-nav="prev" aria-label="Previous">&#8249;</button><button class="pv-nav next" data-nav="next" aria-label="Next">&#8250;</button></div><div class="pv-info"><div class="pv-top"><div class="pv-title">Mobile app UI</div><div class="pv-count">01 / 07</div></div><div class="pv-meta">—</div><div class="pv-thumbs"><button class="pv-thumb on" data-thumb="0" data-title="Go Onn — Chat app, sign-in and messaging" data-meta="—"><img loading="lazy" decoding="async" src="images/b95c43afefe6.jpg" alt=""></button><button class="pv-thumb" data-thumb="1" data-title="HHH — Wellness app, membership and lessons" data-meta="—"><img loading="lazy" decoding="async" src="images/8959b24a6dc1.jpg" alt=""></button><button class="pv-thumb" data-thumb="2" data-title="Oz Chat — Messaging app, chats and profile" data-meta="—"><img loading="lazy" decoding="async" src="images/34d5a201fa8f.jpg" alt=""></button><button class="pv-thumb" data-thumb="3" data-title="Health care app — Clinic booking and shop" data-meta="—"><img loading="lazy" decoding="async" src="images/b0fd95a9b2ea.jpg" alt=""></button><button class="pv-thumb" data-thumb="4" data-title="Appy Home — Shopping app, home and categories" data-meta="—"><img loading="lazy" decoding="async" src="images/89d59b531f47.jpg" alt=""></button><button class="pv-thumb" data-thumb="5" data-title="Fintastics — Personal finance app" data-meta="—"><img loading="lazy" decoding="async" src="images/32cb69f92114.jpg" alt=""></button><button class="pv-thumb" data-thumb="6" data-title="Crochovia — Mobile app, product browsing" data-meta="—"><img loading="lazy" decoding="async" src="images/e63a03b8f625.jpg" alt=""></button></div></div></div></template></div>
   <nav class="work-pn" aria-label="Previous and next category"><a class="prev" href="brand-marks.html"><small>&larr; Previous</small>Brand marks</a><a class="next" href="web-design.html"><small>Next &rarr;</small>Web design</a></nav>
 <footer class="footer-cta">
     <a href="./work.html">&larr; Back to all work</a>
@@ -315,28 +306,6 @@ html,body{overflow-x:hidden;max-width:100%;}
 </script>
 
 
-
-
-<script>
-  (function(){
-    var root = document.documentElement;
-    var btn = document.getElementById('themeToggle');
-    if(!btn) return;
-    function applyTheme(theme, persist){
-      root.classList.add('theme-switching');
-      root.setAttribute('data-theme', theme);
-      btn.setAttribute('aria-pressed', theme === 'light' ? 'true' : 'false');
-      btn.setAttribute('aria-label', theme === 'light' ? 'Switch to dark theme' : 'Switch to light theme');
-      if(persist){ try{ localStorage.setItem('theme', theme); }catch(e){} }
-      setTimeout(function(){ root.classList.remove('theme-switching'); }, 50);
-    }
-    btn.setAttribute('aria-pressed', root.getAttribute('data-theme') === 'light' ? 'true' : 'false');
-    btn.addEventListener('click', function(){
-      var current = root.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
-      applyTheme(current === 'light' ? 'dark' : 'light', true);
-    });
-  })();
-</script>
 
 
 <script>

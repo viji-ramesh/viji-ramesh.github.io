@@ -341,15 +341,6 @@ html,body{overflow-x:hidden;max-width:100%;}
 </head>
 <body>
 
-<button id="themeToggle" type="button" aria-label="Switch to light theme" aria-pressed="false">
-  <svg class="tt-icon tt-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-    <circle cx="12" cy="12" r="4.2"/>
-    <path d="M12 2.5v2.2M12 19.3v2.2M4.2 4.2l1.6 1.6M18.2 18.2l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.2 19.8l1.6-1.6M18.2 5.8l1.6-1.6"/>
-  </svg>
-  <svg class="tt-icon tt-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-    <path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5z"/>
-  </svg>
-</button>
 <div class="topbar">
   <div class="topbar-inner">
     <div class="nav-pills">
@@ -386,28 +377,6 @@ html,body{overflow-x:hidden;max-width:100%;}
 </script>
 
 
-
-
-<script>
-  (function(){
-    var root = document.documentElement;
-    var btn = document.getElementById('themeToggle');
-    if(!btn) return;
-    function applyTheme(theme, persist){
-      root.classList.add('theme-switching');
-      root.setAttribute('data-theme', theme);
-      btn.setAttribute('aria-pressed', theme === 'light' ? 'true' : 'false');
-      btn.setAttribute('aria-label', theme === 'light' ? 'Switch to dark theme' : 'Switch to light theme');
-      if(persist){ try{ localStorage.setItem('theme', theme); }catch(e){} }
-      setTimeout(function(){ root.classList.remove('theme-switching'); }, 50);
-    }
-    btn.setAttribute('aria-pressed', root.getAttribute('data-theme') === 'light' ? 'true' : 'false');
-    btn.addEventListener('click', function(){
-      var current = root.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
-      applyTheme(current === 'light' ? 'dark' : 'light', true);
-    });
-  })();
-</script>
 
 
 <script>

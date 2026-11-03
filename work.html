@@ -1,5 +1,15 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<html lang="en"><head><meta charset="utf-8"><script>
+  (function(){
+    try{
+      var saved = localStorage.getItem('theme');
+      var theme = (saved === 'light' || saved === 'dark') ? saved : 'dark';
+      document.documentElement.setAttribute('data-theme', theme);
+    }catch(e){
+      document.documentElement.setAttribute('data-theme', 'dark');
+    }
+  })();
+</script><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>All work · Vijayalakshmi Ramesh</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -48,6 +58,29 @@
     .masonry .m .pic, .mcols .m .pic{max-height:none !important;background:transparent !important;}
     .masonry .m img, .mcols .m img{max-height:none !important;height:100% !important;width:100%;object-fit:cover !important;}
   }
+:root[data-theme="light"]{--paper:#FBFAF8;--card:#FFFFFF;--ink:#1B1C20;--muted:#5C5C66;--line:rgba(27,28,32,0.12);color-scheme:light;}
+:root[data-theme="dark"]{color-scheme:dark;}
+#themeToggle{
+  position:fixed;top:18px;right:18px;z-index:2000;
+  width:42px;height:42px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--card);border:1px solid var(--line);
+  color:var(--ink);cursor:pointer;
+  box-shadow:0 4px 14px -4px var(--shadow-color);
+  transition:background-color .25s ease, border-color .25s ease, transform .2s ease;
+}
+#themeToggle:hover{transform:translateY(-2px);}
+#themeToggle .tt-icon{width:20px;height:20px;position:absolute;transition:opacity .2s ease, transform .3s ease;}
+#themeToggle .tt-sun{opacity:0;transform:rotate(-60deg) scale(.5);}
+#themeToggle .tt-moon{opacity:1;transform:rotate(0deg) scale(1);}
+:root[data-theme="light"] #themeToggle .tt-sun{opacity:1;transform:rotate(0deg) scale(1);}
+:root[data-theme="light"] #themeToggle .tt-moon{opacity:0;transform:rotate(60deg) scale(.5);}
+  #themeToggle .tt-icon{transition:opacity .01s linear;}
+  #themeToggle:hover{transform:none;}
+ #themeToggle{top:14px;right:14px;width:38px;height:38px;}
+ #themeToggle .tt-icon{width:18px;height:18px;}
+  #themeToggle{top:10px !important;right:10px !important;width:44px !important;height:44px !important;}
+  #themeToggle .tt-icon{width:20px !important;height:20px !important;}
 </style></head><body>
 <header class="top"><a class="back" href="./index.html">&larr; Home</a><span class="name">Vijayalakshmi Ramesh</span></header>
 <main>
@@ -55,43 +88,43 @@
   <h1>Ten disciplines, one practice.</h1>
   <div class="masonry">
   <a class="m" href="./brand-marks.html">
-    <div class="pic"><img src="images/680c72d04a5a.jpg" alt="Brand marks"></div>
+    <div class="pic"><img loading="lazy" decoding="async" src="images/680c72d04a5a.jpg" alt="Brand marks"></div>
     <div class="mc"><span class="mn">01</span><h3>Brand marks</h3><p>Brand guidelines and logo systems.</p><span class="mcount">3 projects</span></div>
   </a>
   <a class="m" href="./product-ui.html">
-    <div class="pic"><img src="images/72400065416b.jpg" alt="Product &amp; UI"></div>
+    <div class="pic"><img loading="lazy" decoding="async" src="images/72400065416b.jpg" alt="Product &amp; UI"></div>
     <div class="mc"><span class="mn">02</span><h3>Product & UI</h3><p>Mobile apps and websites for shopping, fintech and healthcare.</p><span class="mcount">3 projects</span></div>
   </a>
   <a class="m" href="./web-design.html">
-    <div class="pic"><img src="images/4348a2dc47e6.jpg" alt="Web design"></div>
+    <div class="pic"><img loading="lazy" decoding="async" src="images/4348a2dc47e6.jpg" alt="Web design"></div>
     <div class="mc"><span class="mn">03</span><h3>Web design</h3><p>Websites and dashboards built around how clients work.</p><span class="mcount">3 projects</span></div>
   </a>
   <a class="m" href="./packaging.html">
-    <div class="pic"><img src="images/038dc4080f2b.jpg" alt="Packaging"></div>
+    <div class="pic"><img loading="lazy" decoding="async" src="images/038dc4080f2b.jpg" alt="Packaging"></div>
     <div class="mc"><span class="mn">04</span><h3>Packaging</h3><p>Shelf-ready packaging for FMCG brands.</p><span class="mcount">5 projects</span></div>
   </a>
   <a class="m" href="./campaigns.html">
-    <div class="pic"><img src="images/beafe9b194ab.jpg" alt="Campaigns"></div>
+    <div class="pic"><img loading="lazy" decoding="async" src="images/beafe9b194ab.jpg" alt="Campaigns"></div>
     <div class="mc"><span class="mn">05</span><h3>Campaigns</h3><p>Launch posters and social campaign sets.</p><span class="mcount">2 projects</span></div>
   </a>
   <a class="m" href="./info-design.html">
-    <div class="pic"><img src="images/3b65160475ff.jpg" alt="Information design"></div>
+    <div class="pic"><img loading="lazy" decoding="async" src="images/3b65160475ff.jpg" alt="Information design"></div>
     <div class="mc"><span class="mn">06</span><h3>Information design</h3><p>Data stories, pitch decks and reporting visuals.</p><span class="mcount">3 projects</span></div>
   </a>
   <a class="m" href="./print-editorial.html">
-    <div class="pic"><img src="images/8a9366625fba.jpg" alt="Print &amp; editorial"></div>
+    <div class="pic"><img loading="lazy" decoding="async" src="images/8a9366625fba.jpg" alt="Print &amp; editorial"></div>
     <div class="mc"><span class="mn">07</span><h3>Print & editorial</h3><p>Brochures, stationery and book covers.</p><span class="mcount">3 projects</span></div>
   </a>
   <a class="m" href="./icons-illustration.html">
-    <div class="pic"><img src="images/a503013ad12e.jpg" alt="Icons &amp; illustration"></div>
+    <div class="pic"><img loading="lazy" decoding="async" src="images/a503013ad12e.jpg" alt="Icons &amp; illustration"></div>
     <div class="mc"><span class="mn">08</span><h3>Icons & illustration</h3><p>Custom icon sets, character illustration and stickers.</p><span class="mcount">3 projects</span></div>
   </a>
   <a class="m" href="./ai-image-work.html">
-    <div class="pic"><img src="images/186b65ab8167.jpg" alt="AI image work"></div>
+    <div class="pic"><img loading="lazy" decoding="async" src="images/186b65ab8167.jpg" alt="AI image work"></div>
     <div class="mc"><span class="mn">09</span><h3>AI image work</h3><p>AI-assisted visuals and image manipulation.</p><span class="mcount">1 project</span></div>
   </a>
   <a class="m" href="./clay-art.html">
-    <div class="pic"><img src="images/2ccaa8c95ab7.jpg" alt="Clay art"></div>
+    <div class="pic"><img loading="lazy" decoding="async" src="images/2ccaa8c95ab7.jpg" alt="Clay art"></div>
     <div class="mc"><span class="mn">10</span><h3>Clay art</h3><p>Hand-sculpted clay characters and charms.</p><span class="mcount">1 project</span></div>
   </a>
   </div>
